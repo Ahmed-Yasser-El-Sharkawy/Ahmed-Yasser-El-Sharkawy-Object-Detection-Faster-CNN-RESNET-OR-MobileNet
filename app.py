@@ -68,28 +68,69 @@ def predict_video(video_path, model):
     return output_path
 
 # Streamlit Interface
-st.title('Object Detection - Streamlit Implementation')
+def image_ui():
+    st.title('Object Detection - Streamlit Implementation')
 
-model_choice = st.selectbox('Select Model', ['ResNet50', 'MobileNet'])
-model = load_model(model_choice.lower(), num_classes=6)
+    model_choice = st.selectbox('Select Model', ['ResNet50', 'MobileNet'])
+    model = load_model(model_choice.lower(), num_classes=6)
 
-# Image Inference
-st.subheader('Image Inference')
-uploaded_image = st.file_uploader('Upload an Image', type=['jpg', 'jpeg', 'png'])
+    # Image Inference
+    st.subheader('Image Inference')
+    uploaded_image = st.file_uploader('Upload an Image', type=['jpg', 'jpeg', 'png'])
 
-if uploaded_image:
-    image_path = uploaded_image.name
-    with open(image_path, 'wb') as f:
-        f.write(uploaded_image.read())
-    st.image(predict_image(image_path, model), caption='Detected Objects', use_column_width=True)
+    if uploaded_image:
+        image_path = uploaded_image.name
+        with open(image_path, 'wb') as f:
+            f.write(uploaded_image.read())
+        st.image(predict_image(image_path, model), caption='Detected Objects')
+        
+def video_ui():
+    st.title('Object Detection - Streamlit Implementation')
 
-# Video Inference
-st.subheader('Video Inference')
-uploaded_video = st.file_uploader('Upload a Video', type=['mp4', 'avi'])
+    model_choice = st.selectbox('Select Model', ['ResNet50', 'MobileNet'])
+    model = load_model(model_choice.lower(), num_classes=6)
 
-if uploaded_video:
-    video_path = uploaded_video.name
-    with open(video_path, 'wb') as f:
-        f.write(uploaded_video.read())
-    output_video_path = predict_video(video_path, model)
-    st.video(output_video_path)
+    # Video Inference
+    st.subheader('Video Inference')
+    uploaded_video = st.file_uploader('Upload a Video', type=['mp4', 'avi'])
+
+    if uploaded_video:
+        video_path = uploaded_video.name
+        with open(video_path, 'wb') as f:
+            f.write(uploaded_video.read())
+        output_video_path = predict_video(video_path, model)
+        st.video(output_video_path)
+
+
+st.set_page_config(
+    page_title="object Detection",
+    page_icon="🔬",
+    layout="wide"
+)
+
+
+tab = st.sidebar.radio("📚 App Views", [
+    "🔬 images",
+    "🔬 video",
+])
+st.sidebar.image("Images_App/download.jpeg")
+st.sidebar.markdown("# Faculty of information systems and computer science")
+
+
+
+st.sidebar.markdown("## **Supervisor:** Prof. Ahmed Abd-ELhafez")
+st.sidebar.markdown("## **Supervisor:** Dr. Asmaa AbdulQawy")
+st.sidebar.markdown("**Team Members:**")
+st.sidebar.markdown("1. Abdelrahman Alaa El-Din Sobeh")
+st.sidebar.markdown("2. Mohamed Sarbi Hossiny")
+st.sidebar.markdown("3. Mohamed Nasr Nasr Foda")
+st.sidebar.markdown("4. Eman Ahmed Abdallah Hassan ")
+st.sidebar.markdown("5. Abdelrahman Mohamed Abbas ")
+st.sidebar.markdown("6. Ahmed Yasser El Sharakawy")
+
+
+if tab == "🔬 images":
+    image_ui()
+
+elif tab == "🔬 video":
+    video_ui()
